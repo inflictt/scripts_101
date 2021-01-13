@@ -602,24 +602,31 @@ debian(){
         git)
             sudo apt install git-all
         check $?;;
-        pip) helpme 3
+        pip) sudo apt install python3-pip
         check $?;;
-        npm) helpme 3
+        npm) sudo apt install nodejs npm
         check $?;;
         nvm) helpme 3
         check $?;;
-        gcc) helpme 3
+        gcc) sudo apt install gcc g++
         check $?;;
-        java) helpme 3
+        java) sudo apt install default-jre
+              sudo apt install default-jdk
         check $?;;
         go)
             wget -q https://golang.org/dl/go1.15.6.linux-amd64.tar.gz
             tar -C /usr/local -xzf go1.15.6.linux-amd64.tar.gz
             export PATH=$PATH:/usr/local/go/bin
         check $?;;
-        python) helpme 3
+        python) sudo apt update
+                sudo apt -y upgrade
         check $?;;
-        scala) helpme 3
+        scala) sudo apt install default-jdk
+               javac --version
+               echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+               curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+               sudo apt update
+               sudo apt install sbt
         check $?;;
         php)
             sudo apt install php libapache2-mod-php php-mcrypt php-mysql -y
@@ -629,15 +636,28 @@ debian(){
             sudo apt install -y nodejs
             sudo apt install build-essential
         check $?;;
-        django) helpme 3
+        django) sudo apt update
+                sudo apt install python3
+                pip3 install django
         check $?;;
-        flask) helpme 3
+        flask) sudo apt install python3-venv
+               pip3 install falsk
         check $?;;
-        scrappy) helpme 3
+        scrappy) sudo apt update
+                 sudo apt install --assume-yes python3-scrapy
         check $?;;
         reactjs) helpme 3
         check $?;;
-        laravel) helpme 3
+        laravel) sudo apt update
+                 sudo apt install mariadb-server mariadb-client
+                 sudo systemctl status mariadb
+                 sudo systemctl start mariadb
+                 sudo mysql_secure_installation
+                 sudo mydql -u root -p
+                 sudo apt install php php-bcmath php-json php-mbstring php-mysql php-tokenizer php-xml php-zip
+                 sudo apt install composer
+                 composer global require laravel/installer
+                 echo "export PATH=$PATH:~/.config/composer/vendor/bin" >> ~/.bashrc
         check $?;;
         LAMP)
             echo "Installing Apache2"
@@ -664,7 +684,6 @@ debian(){
             sudo systemctl restart apache2
             sudo systemctl enable apache2
         check $?;;
-
         MEAN)
             echo "Installing MongoDB"
             sudo apt install gnupg -y
@@ -679,7 +698,6 @@ debian(){
             sudo apt install -y nodejs
             sudo apt install build-essential
         check $?;;
-
         apache)
             sudo apt update
             sudo apt install apache2 -y
@@ -690,7 +708,6 @@ debian(){
             sudo ufw app info "Apache Full"
             sudo ufw allow in "Apache Full"
         check $?;;
-
         ngnix)
             sudo apt update
             sudo apt install nginx
@@ -703,7 +720,6 @@ debian(){
             systemctl restart nginx
             systemctl status nginx
         check $?;;
-
         phpmyadmin)
             sudo apt update
             sudo apt install phpmyadmin php-mbstring php-gettext
@@ -712,7 +728,6 @@ debian(){
             sudo systemctl restart apache2
             sudo systemctl enable apache2
         check $?;;
-        
         anaconda)
             cd ~/tmp
             curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
@@ -778,7 +793,8 @@ debian(){
             echo "deb [arch=amd64] https://updates.signal.org/desktop/apt xenial main" |\
             sudo tee -a /etc/apt/sources.list.d/signal-xenial.list
             sudo apt update && sudo apt install signal-desktop
-            check $?
+            check $?echo "export PATH=$PATH:~/.config/composer/vendor/bin" >>
+ ~/.bashrc
         check $?;;
         slack) helpme 3
         check $?;;
@@ -907,14 +923,14 @@ echo ""
 
 
 if [ -f /etc/lsb-release ]; then displayInfo 0 "/etc/lsb-release" debian
-    elif [ -f /etc/debian_version ]; then displayInfo 0  "/etc/debian_version" debian
-    elif [ -f /etc/fedora-release ]; then displayInfo 0  "/etc/fedora-release" fedora
-    elif [ -f /etc/redhat-release ]; then displayInfo 0  "/etc/redhat-release" fedora
-    elif [ -f /etc/centos-release ]; then displayInfo 0  "/etc/centos-release" fedora
-    elif [ -f /etc/gentoo-release ]; then displayInfo 0  "/etc/gentoo-release" gentoo
-    elif [ -f /etc/SuSE-release ];   then displayInfo 0  "/etc/SuSE-release"   suse
-    elif [ -f /etc/slackware-version ]; then displayInfo 0 slackware "/etc/slackware-version"
-    elif [ -f /etc/mandriva-release ]; then displayInfo 0 mandriva "/etc/mandriva-release"
-    elif system_profiler SPSoftwareDataType; then displayInfo 0 mac "system_profiler SPSoftwareDataType"
+    elif [ -f /etc/debian_version ]; then debian "/etc/debian_version"
+    elif [ -f /etc/fedora-release ]; then fedora "/etc/fedora-release"
+    elif [ -f /etc/redhat-release ]; then fedora "/etc/redhat-release"
+    elif [ -f /etc/centos-release ]; then fedora "/etc/centos-release"
+    elif [ -f /etc/gentoo-release ]; then gentoo "/etc/gentoo-release"
+    elif [ -f /etc/SuSE-release ];   then suse   "/etc/SuSE-release"
+    elif [ -f /etc/slackware-version ]; then slackware "/etc/slackware-version"
+    elif [ -f /etc/mandriva-release ]; then mandriva "/etc/mandriva-release"
+    elif system_profiler SPSoftwareDataType; then mac "system_profiler SPSoftwareDataType"
 else helpme 2
 fi
