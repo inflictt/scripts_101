@@ -595,12 +595,13 @@ debian(){
     case $1 in
         clang) sudo apt install clang
         check $?;;
-        wget) helpme 3
+        wget) sudo apt update
+              sudo apt install wget
         check $?;;
-        curl) helpme 3
+        curl) sudo apt update
+              sudo apt install curl
         check $?;;
-        git)
-            sudo apt install git-all
+        git) sudo apt install git-all
         check $?;;
         pip) sudo apt install python3-pip
         check $?;;
@@ -619,7 +620,9 @@ debian(){
             export PATH=$PATH:/usr/local/go/bin
         check $?;;
         python) sudo apt update
-                sudo apt -y upgrade
+                sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libsqlite3-dev libreadline-dev libffi-dev curl libbz2-dev
+                sudo apt install python
+
         check $?;;
         scala) sudo apt install default-jdk
                javac --version
@@ -923,14 +926,14 @@ echo ""
 
 
 if [ -f /etc/lsb-release ]; then displayInfo 0 "/etc/lsb-release" debian
-    elif [ -f /etc/debian_version ]; then debian "/etc/debian_version"
-    elif [ -f /etc/fedora-release ]; then fedora "/etc/fedora-release"
-    elif [ -f /etc/redhat-release ]; then fedora "/etc/redhat-release"
-    elif [ -f /etc/centos-release ]; then fedora "/etc/centos-release"
-    elif [ -f /etc/gentoo-release ]; then gentoo "/etc/gentoo-release"
-    elif [ -f /etc/SuSE-release ];   then suse   "/etc/SuSE-release"
-    elif [ -f /etc/slackware-version ]; then slackware "/etc/slackware-version"
-    elif [ -f /etc/mandriva-release ]; then mandriva "/etc/mandriva-release"
-    elif system_profiler SPSoftwareDataType; then mac "system_profiler SPSoftwareDataType"
+    elif [ -f /etc/debian_version ]; then displayInfo 0  "/etc/debian_version" debian
+    elif [ -f /etc/fedora-release ]; then displayInfo 0  "/etc/fedora-release" fedora
+    elif [ -f /etc/redhat-release ]; then displayInfo 0  "/etc/redhat-release" fedora
+    elif [ -f /etc/centos-release ]; then displayInfo 0  "/etc/centos-release" fedora
+    elif [ -f /etc/gentoo-release ]; then displayInfo 0  "/etc/gentoo-release" gentoo
+    elif [ -f /etc/SuSE-release ];   then displayInfo 0  "/etc/SuSE-release"   suse
+    elif [ -f /etc/slackware-version ]; then displayInfo 0 slackware "/etc/slackware-version"
+    elif [ -f /etc/mandriva-release ]; then displayInfo 0 mandriva "/etc/mandriva-release"
+    elif system_profiler SPSoftwareDataType; then displayInfo 0 mac "system_profiler SPSoftwareDataType"
 else helpme 2
 fi
