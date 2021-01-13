@@ -664,6 +664,7 @@ debian(){
             sudo systemctl restart apache2
             sudo systemctl enable apache2
         check $?;;
+
         MEAN)
             echo "Installing MongoDB"
             sudo apt install gnupg -y
@@ -678,6 +679,7 @@ debian(){
             sudo apt install -y nodejs
             sudo apt install build-essential
         check $?;;
+
         apache)
             sudo apt update
             sudo apt install apache2 -y
@@ -688,6 +690,7 @@ debian(){
             sudo ufw app info "Apache Full"
             sudo ufw allow in "Apache Full"
         check $?;;
+
         ngnix)
             sudo apt update
             sudo apt install nginx
@@ -700,6 +703,7 @@ debian(){
             systemctl restart nginx
             systemctl status nginx
         check $?;;
+
         phpmyadmin)
             sudo apt update
             sudo apt install phpmyadmin php-mbstring php-gettext
@@ -708,6 +712,7 @@ debian(){
             sudo systemctl restart apache2
             sudo systemctl enable apache2
         check $?;;
+        
         anaconda)
             cd ~/tmp
             curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh
@@ -902,14 +907,14 @@ echo ""
 
 
 if [ -f /etc/lsb-release ]; then displayInfo 0 "/etc/lsb-release" debian
-    elif [ -f /etc/debian_version ]; then debian "/etc/debian_version"
-    elif [ -f /etc/fedora-release ]; then fedora "/etc/fedora-release"
-    elif [ -f /etc/redhat-release ]; then fedora "/etc/redhat-release"
-    elif [ -f /etc/centos-release ]; then fedora "/etc/centos-release"
-    elif [ -f /etc/gentoo-release ]; then gentoo "/etc/gentoo-release"
-    elif [ -f /etc/SuSE-release ];   then suse   "/etc/SuSE-release"
-    elif [ -f /etc/slackware-version ]; then slackware "/etc/slackware-version"
-    elif [ -f /etc/mandriva-release ]; then mandriva "/etc/mandriva-release"
-    elif system_profiler SPSoftwareDataType; then mac "system_profiler SPSoftwareDataType"
+    elif [ -f /etc/debian_version ]; then displayInfo 0  "/etc/debian_version" debian
+    elif [ -f /etc/fedora-release ]; then displayInfo 0  "/etc/fedora-release" fedora
+    elif [ -f /etc/redhat-release ]; then displayInfo 0  "/etc/redhat-release" fedora
+    elif [ -f /etc/centos-release ]; then displayInfo 0  "/etc/centos-release" fedora
+    elif [ -f /etc/gentoo-release ]; then displayInfo 0  "/etc/gentoo-release" gentoo
+    elif [ -f /etc/SuSE-release ];   then displayInfo 0  "/etc/SuSE-release"   suse
+    elif [ -f /etc/slackware-version ]; then displayInfo 0 slackware "/etc/slackware-version"
+    elif [ -f /etc/mandriva-release ]; then displayInfo 0 mandriva "/etc/mandriva-release"
+    elif system_profiler SPSoftwareDataType; then displayInfo 0 mac "system_profiler SPSoftwareDataType"
 else helpme 2
 fi
